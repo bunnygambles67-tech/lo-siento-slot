@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07121d">
+<title>Lo Siento! — Version 2</title>
+<style>
+:root{
+  --ink:#f7fbff;--muted:#9db7c8;--bg:#07121d;--panel:#0c2232;--panel2:#123449;
+  --line:#2c6078;--gold:#ffd166;--orange:#ff9b4a;--aqua:#5ee7ff;--purple:#9e8cff;
+  --danger:#ff718e;--green:#75e0a5;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+body{overflow-x:hidden;background:
+ radial-gradient(ellipse at 50% -15%,#27637b 0,#12354a 28%,#07121d 70%),
+ linear-gradient(#07121d,#07121d)}
+button{font:inherit}
+button:focus-visible{outline:3px solid var(--aqua);outline-offset:2px}
+.app{width:min(1060px,100%);margin:auto;padding:14px 12px 30px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.brand{font-size:clamp(34px,8vw,64px);font-weight:1000;letter-spacing:-3px;line-height:.9;text-shadow:0 4px 18px #0008}
+.brand span{color:var(--gold)}
+.tagline{font-size:12px;color:var(--muted);margin-top:9px}
+.pill{border:1px solid #41788c;background:#102e40;color:#c6effa;border-radius:999px;padding:8px 12px;font-size:11px;font-weight:900;letter-spacing:.04em}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0 10px}
+.stat{padding:12px 13px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#123247,#0b1e2d);box-shadow:0 12px 25px #0003}
+.stat small{display:block;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.08em}
+.stat strong{display:block;font-size:clamp(17px,4vw,25px);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shell{border:1px solid #2c6078;border-radius:25px;background:linear-gradient(145deg,#102c3e,#081925);box-shadow:0 24px 60px #0006;padding:12px}
+.modebar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:2px 4px 11px;color:var(--muted);font-size:12px}
+.modebar b{color:var(--gold)}
+.reel-frame{position:relative;padding:9px;border-radius:20px;background:
+ linear-gradient(145deg,#204d62,#07141f 58%,#173c50);border:1px solid #50849a;
+ box-shadow:inset 0 0 0 2px #06101a, inset 0 0 35px #0009,0 0 30px #1a9cc533}
+.reel-frame:before,.reel-frame:after{content:"";position:absolute;left:8%;right:8%;height:2px;background:linear-gradient(90deg,transparent,var(--aqua),transparent);opacity:.4}
+.reel-frame:before{top:4px}.reel-frame:after{bottom:4px}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(6,1fr);gap:5px}
+.cell{position:relative;aspect-ratio:1/1.04;display:flex;align-items:center;justify-content:center;border-radius:11px;
+ background:linear-gradient(145deg,#2a586d,#173548);border:1px solid #4b7c8e;
+ font-size:clamp(23px,6vw,48px);user-select:none;transition:transform .2s,filter .2s,box-shadow .2s}
+.cell:after{content:"";position:absolute;inset:1px;border-radius:10px;background:linear-gradient(135deg,#fff2,transparent 35%);pointer-events:none}
+.cell.win{z-index:2;transform:scale(1.05);border-color:var(--gold);box-shadow:0 0 0 2px var(--gold),0 0 28px #ffd166bb;filter:saturate(1.4)}
+.cell.scatter{background:linear-gradient(145deg,#623b79,#2d2044);border-color:#c09aff}
+.cell.wild{background:linear-gradient(145deg,#176b7d,#12394e);border-color:#6ceaff}
+.cell.prize{background:linear-gradient(145deg,#765b20,#332711);border-color:#e9bd4f;color:var(--gold)}
+.cell.collector{background:linear-gradient(145deg,#1e685b,#123d39);border-color:#73e0bd}
+.cell.upgrader{background:linear-gradient(145deg,#674b7b,#30223e);border-color:#d0a8ff}
+.label{position:absolute;bottom:3px;left:0;right:0;text-align:center;font-size:9px;font-weight:1000;color:#fff;opacity:.85}
+.payline{height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:8px 12px 0;opacity:0;transition:opacity .2s}
+.payline.show{opacity:1}
+.controls{display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:9px;margin-top:12px}
+.btn{min-height:47px;border:1px solid #38687d;border-radius:14px;background:#0c2232;color:var(--ink);font-weight:900;cursor:pointer;padding:10px 8px}
+.btn:hover{filter:brightness(1.12)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.spin{border:0;color:#241a08;background:linear-gradient(135deg,#ffdd75,#ff8b3c);font-size:19px;letter-spacing:.04em;box-shadow:0 7px 20px #ff9b4a44}
+.buybar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:9px}
+.buybar .btn{font-size:11px;line-height:1.25}
+.log{margin-top:11px;min-height:58px;padding:12px 14px;border:1px solid #254e63;border-radius:15px;background:#091a28;color:var(--muted);font-size:13px;line-height:1.45}
+.log strong{color:var(--gold)}
+.footerline{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:11px;color:var(--muted);font-size:11px}
+.overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:#02080edb;z-index:20}
+.overlay.open{display:flex}
+.modal{width:min(510px,100%);border:1px solid #568aa0;border-radius:27px;padding:25px 18px;text-align:center;background:
+ radial-gradient(circle at 50% 0,#315c70 0,#112e41 40%,#081722 100%);
+ box-shadow:0 30px 90px #000b}
+.modal .eyebrow{font-size:11px;letter-spacing:.16em;color:var(--aqua);font-weight:1000}
+.modal h2{font-size:clamp(29px,8vw,50px);line-height:.95;margin:13px 0 8px;letter-spacing:-2px}
+.modal h2 span{color:var(--gold)}
+.modal p{color:var(--muted);margin:8px auto 18px;max-width:380px}
+.bonus-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}
+.bonus-card{padding:12px 5px;border-radius:15px;border:1px solid #47758a;background:#0a1e2c}
+.bonus-card b{display:block;color:var(--gold);font-size:20px}
+.bonus-card small{color:var(--muted);font-size:10px}
+.modal .btn{width:100%;background:linear-gradient(135deg,#ffda6b,#ff8b3e);color:#231b09;border:0}
+.wave{font-size:48px;animation:float 2.2s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-9px) rotate(-3deg)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.shake{animation:shake .28s linear 2}
+@media(max-width:600px){
+ .app{padding:10px 8px 24px}.stats{grid-template-columns:repeat(2,1fr)}
+ .shell{padding:8px;border-radius:20px}.reel-frame{padding:5px}.grid{gap:4px}.cell{border-radius:8px}
+ .controls{grid-template-columns:1fr 1.35fr 1fr}.buybar{grid-template-columns:repeat(2,1fr)}
+ .modal{padding:23px 14px}.brand{letter-spacing:-2px}
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div>
+      <div class="brand">Lo <span>Siento!</span></div>
+      <div class="tagline">A flood of prizes. A floating hen. A very dramatic apology.</div>
+    </div>
+    <div class="pill">ORIGINAL SLOT PROTOTYPE · V2</div>
+  </header>
+
+  <section class="stats">
+    <div class="stat"><small>BALANCE</small><strong id="balance">10,000.00×</strong></div>
+    <div class="stat"><small>BET</small><strong id="bet">1.00×</strong></div>
+    <div class="stat"><small>LAST WIN</small><strong id="lastWin">0.00×</strong></div>
+    <div class="stat"><small>FREE SPINS</small><strong id="freeSpins">0</strong></div>
+  </section>
+
+  <section class="shell">
+    <div class="modebar">
+      <span>MODE: <b id="mode">BASE GAME</b></span>
+      <span>GLOBAL MULTIPLIER: <b id="globalMultiplier">1×</b></span>
+      <span>SCATTERS: <b id="scatterCount">0</b></span>
+    </div>
+
+    <div class="reel-frame" id="reelFrame">
+      <div class="grid" id="grid"></div>
+      <div class="payline" id="payline"></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="betDown">− Bet</button>
+      <button class="btn spin" id="spin">SPIN</button>
+      <button class="btn" id="betUp">Bet +</button>
+    </div>
+
+    <div class="buybar">
+      <button class="btn" id="regularBuy">REGULAR<br>BUY · 100×</button>
+      <button class="btn" id="superBuy">SUPER<br>BUY · 500×</button>
+      <button class="btn" id="huntBuy">SCATTER HUNT<br>250×</button>
+      <button class="btn" id="mysteryBuy">MYSTERY<br>300×</button>
+    </div>
+
+    <div class="log" id="log" aria-live="polite">
+      The water is calm. For now. Spin to begin.
+    </div>
+    <div class="footerline">
+      <span>🪶 Low · 📱 Premium · 🪽 Wild · 🌀 Scatter</span>
+      <span>Max win: <b>50,000×</b></span>
+    </div>
+  </section>
+</main>
+
+<div class="overlay" id="bonusOverlay" role="dialog" aria-modal="true" aria-labelledby="bonusTitle">
+  <div class="modal">
+    <div class="wave">🐔🌊</div>
+    <div class="eyebrow" id="bonusEyebrow">BONUS TRIGGERED</div>
+    <h2 id="bonusTitle">GET YOUR <span>FREE SPINS!</span></h2>
+    <p id="bonusDescription">The hen has entered the flood. Your bonus is ready.</p>
+    <div class="bonus-cards">
+      <div class="bonus-card"><b id="bonusSpins">10</b><small>FREE SPINS</small></div>
+      <div class="bonus-card"><b id="bonusMult">2×</b><small>START MULTIPLIER</small></div>
+      <div class="bonus-card"><b id="bonusTier">REGULAR</b><small>BONUS TIER</small></div>
+    </div>
+    <button class="btn" id="continueBonus">CONTINUE</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+const ROWS=6, REELS=5, MAX_WIN=50000;
+const PAYLINES=[
+[3,3,3,3,3],[2,2,2,2,2],[4,4,4,4,4],[1,1,1,1,1],[5,5,5,5,5],[6,6,6,6,6],
+[2,3,4,3,2],[4,3,2,3,4],[1,2,3,2,1],[5,4,3,4,5],[3,2,1,2,3],[3,4,5,4,3],
+[2,1,2,1,2],[4,5,4,5,4],[1,3,1,3,1],[6,4,6,4,6],[2,4,2,4,2],[5,3,5,3,5],
+[1,2,4,2,1],[6,5,3,5,6],[2,3,5,3,2],[5,4,2,4,5],[1,3,5,3,1],[6,4,2,4,6],
+[3,1,3,1,3],[4,6,4,6,4],[2,5,2,5,2],[5,2,5,2,5]
+];
+const ICON={feather:"🪶",corn:"🌽",bucket:"🪣",slipper:"🩴",phone:"📱",wave:"🌊",boat:"⛵",man:"🙍",hen:"🐔",wild:"🪽",scatter:"🌀",collector:"🪣",upgrader:"⬆️"};
+const PAY={
+feather:{3:.1,4:.2,5:.4},corn:{3:.1,4:.2,5:.5},bucket:{3:.1,4:.25,5:.7},slipper:{3:.2,4:.5,5:1},
+phone:{3:.75,4:1.5,5:3},wave:{3:1,4:2,5:4},boat:{3:1.25,4:2.5,5:6},man:{3:1.5,4:3,5:8},hen:{3:2,4:5,5:15}
+};
+const REGULAR=["feather","feather","feather","feather","corn","corn","corn","bucket","bucket","slipper","slipper","phone","wave","boat","man","hen","wild"];
+const PRIZE=[1,2,3,5,10,25,50,100,150,200,250,500,750,1000,2500,5000,10000,25000,50000];
+let balance=10000,bet=1,lastWin=0,board=[],busy=false,freeSpins=0,bonusTier="BASE GAME",globalMultiplier=1;
+const $=id=>document.getElementById(id), money=x=>Number(x).toFixed(2)+"×", rand=a=>a[Math.floor(Math.random()*a.length)];
+function prizeValue(){const r=Math.random();if(r<.58)return rand([1,2,3,5]);if(r<.86)return rand([5,10,15,25]);if(r<.96)return rand([25,50,100,150,200,250]);if(r<.995)return rand([500,750,1000,2500]);return rand([5000,10000,25000,50000]);}
+function symbol(){
+ const r=Math.random();
+ if(r<.04)return "scatter";
+ if(r<.072)return "prize:"+prizeValue();
+ if(r<.082)return "collector";
+ if(r<.092)return "upgrader";
+ return rand(REGULAR);
+}
+function makeBoard(opts={}){
+ return Array.from({length:ROWS},()=>Array.from({length:REELS},()=>{
+  if(opts.hunt&&Math.random()<.11)return "scatter";
+  if(opts.bonus&&Math.random()<.08)return "prize:"+prizeValue();
+  return symbol();
+ }));
+}
+function info(s){return s.startsWith("prize:")?{type:"prize",value:+s.split(":")[1]}:{type:s};}
+function render(winners=[]){
+ const wins=new Set(winners.map(x=>x[0]+"-"+x[1]));$("grid").innerHTML="";
+ board.forEach((row,r)=>row.forEach((s,c)=>{
+  const el=document.createElement("div"),i=info(s);el.className="cell "+i.type;
+  if(wins.has(r+"-"+c))el.classList.add("win");
+  el.textContent=i.type==="prize"?"💰":(ICON[i.type]||"❔");
+  if(i.type==="prize"){const lab=document.createElement("span");lab.className="label";lab.textContent=i.value+"×";el.appendChild(lab)}
+  $("grid").appendChild(el);
+ }));
+ $("scatterCount").textContent=count("scatter");
+}
+function count(type){return board.flat().filter(s=>info(s).type===type).length}
+function evaluate(){
+ let total=0,winners=[];
+ for(const path of PAYLINES){
+  let first=null,n=0;
+  for(let c=0;c<REELS;c++){
+   const t=info(board[path[c]-1][c]).type;
+   if(["scatter","prize","collector","upgrader"].includes(t))break;
+   if(first===null&&t!=="wild")first=t;
+   if(first===null&&t==="wild"){n++;continue}
+   if(t===first||t==="wild")n++;else break;
+  }
+  if(first&&PAY[first]&&n>=3){total+=PAY[first][Math.min(5,n)]||0;for(let c=0;c<n;c++)winners.push([path[c]-1,c])}
+ }
+ return {total,winners};
+}
+function collect(){
+ let prizes=0,collectors=0,upgraders=0;
+ board.flat().forEach(s=>{const i=info(s);if(i.type==="prize")prizes+=i.value;if(i.type==="collector")collectors++;if(i.type==="upgrader")upgraders++});
+ if(upgraders)prizes=Math.min(MAX_WIN,prizes+upgraders*5);
+ if(collectors)prizes=Math.min(MAX_WIN,prizes*(1+collectors*.25));
+ return {prizes,collectors,upgraders};
+}
+function bonusFor(n){
+ if(n>=5)return {tier:"EPIC",spins:12,mult:5};
+ if(n===4)return {tier:"SUPER",spins:10,mult:3};
+ if(n===3)return {tier:"REGULAR",spins:8,mult:2};
+ return null;
+}
+function mystery(){
+ const r=Math.random();if(r<.02)return {tier:"EPIC",spins:12,mult:5};if(r<.14)return {tier:"SUPER",spins:10,mult:3};if(r<.46)return {tier:"REGULAR",spins:8,mult:2};return null;
+}
+function update(){
+ $("balance").textContent=money(balance);$("bet").textContent=money(bet);$("lastWin").textContent=money(lastWin);
+ $("freeSpins").textContent=freeSpins;$("mode").textContent=bonusTier;$("globalMultiplier").textContent=globalMultiplier+"×";
+}
+function lock(v){["spin","regularBuy","superBuy","huntBuy","mysteryBuy","betDown","betUp"].forEach(id=>$(id).disabled=v)}
+function openBonus(b){
+ $("bonusTier").textContent=b.tier;$("bonusSpins").textContent=b.spins;$("bonusMult").textContent=b.mult+"×";
+ $("bonusEyebrow").textContent=b.tier+" BONUS TRIGGERED";
+ $("bonusDescription").textContent=b.tier==="EPIC"?"The hen floats away into the epic flood.":"The flood rises and the prize hunt begins.";
+ $("bonusOverlay").classList.add("open");
+}
+function runBonus(b){
+ freeSpins=b.spins;bonusTier=b.tier+" BONUS";globalMultiplier=b.mult;
+ for(let i=0;i<b.spins;i++){
+  board=makeBoard({bonus:true});const w=evaluate(),f=collect();
+  lastWin+=w.total+f.prizes;
+  freeSpins--;
+ }
+ lastWin=Math.min(MAX_WIN,lastWin*(globalMultiplier));
+ balance+=lastWin;render();update();
+ $("log").innerHTML="<strong>"+b.tier+" BONUS COMPLETE</strong> · The hen floated away · "+b.spins+" free spins played · final win <strong>"+money(lastWin)+"</strong>";
+ bonusTier="BASE GAME";globalMultiplier=1;update();
+}
+function play(kind="base"){
+ if(busy)return;
+ const costs={base:bet,regular:100*bet,super:500*bet,hunt:250*bet,mystery:300*bet};
+ const cost=costs[kind];if(balance<cost){$("log").textContent="Not enough balance for this action.";return}
+ busy=true;lock(true);balance-=cost;lastWin=0;globalMultiplier=1;bonusTier="BASE GAME";
+ board=makeBoard({hunt:kind==="hunt"});render();update();$("reelFrame").classList.add("shake");
+ setTimeout(()=>{
+  const scat=count("scatter"),b=kind==="mystery"?mystery():bonusFor(scat),w=evaluate(),f=collect();
+  lastWin=Math.min(MAX_WIN,w.total+f.prizes);balance+=lastWin;render(w.winners);update();
+  $("log").innerHTML="<strong>"+(kind==="base"?"BASE SPIN":"BUY MODE")+"</strong> · "+scat+" scatters · prize collection "+money(f.prizes)+" · win <strong>"+money(lastWin)+"</strong>";
+  $("reelFrame").classList.remove("shake");
+  if(b){balance-=lastWin;lastWin=0;openBonus(b);$("continueBonus").onclick=()=>{ $("bonusOverlay").classList.remove("open");runBonus(b);busy=false;lock(false);};}
+  else{busy=false;lock(false)}
+ },480);
+}
+$("spin").onclick=()=>play("base");$("regularBuy").onclick=()=>play("regular");$("superBuy").onclick=()=>play("super");$("huntBuy").onclick=()=>play("hunt");$("mysteryBuy").onclick=()=>play("mystery");
+$("betDown").onclick=()=>{bet=Math.max(.1,+((bet-.1).toFixed(2)));update()};
+$("betUp").onclick=()=>{bet=+((bet+.1).toFixed(2));update()};
+board=makeBoard();render();update();
+</script>
+</body>
+</html>
