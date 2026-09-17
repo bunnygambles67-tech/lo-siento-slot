@@ -1,0 +1,18 @@
+{
+  "max_win_x": 50000,
+  "target_rtp": 0.96,
+  "grid": {
+    "reels": 5,
+    "rows": 6
+  },
+  "bonus_triggers": {
+    "3": "REGULAR",
+    "4": "SUPER",
+    "5": "EPIC"
+  },
+  "bonus_spins": {
+    "REGULAR": 8,
+    "SUPER": 12,
+    "EPIC": 16
+  }
+}
